@@ -53,7 +53,10 @@
                 <div><label>Rulo Boy(m)</label><input type="number" id="rLength" value="15.6"></div>
             </div>
             <div class="input-row">
+                <div><label>Desen Tekrarı (cm)</label><input type="number" id="pRepeat" value="0"></div>
                 <div><label>Döviz Kuru</label><input type="number" id="exchange" value="1"></div>
+            </div>
+            <div class="input-row">
                 <div><label>KDV</label>
                     <select id="kdv">
                         <option value="1.20" selected>%20</option>
@@ -61,13 +64,10 @@
                         <option value="1.00">%0</option>
                     </select>
                 </div>
-            </div>
-            <div class="input-row">
                 <div><label>Tutkal(100g/TL)</label><input type="number" id="gluePrice" value="150"></div>
-                <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
             </div>
             <div class="input-row">
-                <div><label>Rulo Fiyatı</label><input type="number" id="uPrice" value="0"></div>
+                <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
                 <div><label>Birim</label>
                     <select id="uCurr">
                         <option value="TRY">₺</option>
@@ -76,6 +76,7 @@
                     </select>
                 </div>
             </div>
+            <label>Birim Rulo Fiyatı</label><input type="number" id="uPrice" value="0">
         </div>
 
         <div class="card">
@@ -84,8 +85,8 @@
             <div class="input-row"><input type="text" id="mName" placeholder="Salon"><input type="text" id="mCode" placeholder="1220-02"></div>
             <label>Tavan Yüksekliği (m)</label><input type="number" id="mHeight" value="2.65" step="0.01">
             <div class="input-row">
-                <div><label>Boşluk ($-m^2$)</label><input type="number" id="mVoid" value="0"></div>
-                <div><label>İlave ($+m^2$)</label><input type="number" id="mExtra" value="0"></div>
+                <div><label>Boşluk ($-m²)</label><input type="number" id="mVoid" value="0"></div>
+                <div><label>İlave ($+m²)</label><input type="number" id="mExtra" value="0"></div>
             </div>
             <div class="sketch-box">
                 <input type="number" id="w1" class="wall-input top-w" placeholder="Üst"><input type="number" id="w2" class="wall-input bottom-w" placeholder="Giriş"><input type="number" id="w3" class="wall-input left-w" placeholder="Sol"><input type="number" id="w4" class="wall-input right-w" placeholder="Sağ">
@@ -125,32 +126,26 @@
         const mExtra = parseFloat(document.getElementById('mExtra').value) || 0;
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
         const rBoy = parseFloat(document.getElementById('rLength').value);
+        const pRep = parseFloat(document.getElementById('pRepeat').value) / 100 || 0;
         const price = parseFloat(document.getElementById('uPrice').value) || 0;
         const exch = parseFloat(document.getElementById('exchange').value) || 1;
         const gluePrice = parseFloat(document.getElementById('gluePrice').value) || 150;
         const labor = parseFloat(document.getElementById('labor').value) || 0;
         const kdv = parseFloat(document.getElementById('kdv').value);
 
-        const stripH = h + 0.10;
+        // Şerit boyu hesabı: Tavan + Pay + Desen Tekrarı
+        const stripH = h + 0.10 + pRep;
         const stripsInRoll = Math.floor(rBoy / stripH);
         
-        // --- YENİ HESAPLAMA MANTIĞI ---
-        // 1. Duvar ölçülerinden gelen toplam boy sayısı
+        // Boy ihtiyacı hesabı
         const stripsFromWalls = Math.ceil(wTotal / rEn);
-        
-        // 2. İlave alandan gelen boy sayısı (+)
         const stripsFromExtra = Math.ceil(mExtra / (rEn * h));
-        
-        // 3. Boşluktan tasarruf edilen boy sayısı (-)
-        // Kaç tam boy tasarruf ettiğimizi hesaplıyoruz
         const stripsSavedFromVoid = Math.floor(mVoid / (rEn * h));
         
-        // 4. Net gereken boy sayısı
         let stripsNeeded = (stripsFromWalls + stripsFromExtra) - stripsSavedFromVoid;
-        if(stripsNeeded < 0) stripsNeeded = 0; // Negatif olamaz
+        if(stripsNeeded < 0) stripsNeeded = 0;
 
-        // 5. Rulo hesabı
-        const rollsNeeded = Math.ceil(stripsNeeded / stripsInRoll);
+        const rollsNeeded = stripsInRoll > 0 ? Math.ceil(stripsNeeded / stripsInRoll) : 0;
         
         const fullStripsLeft = rollsNeeded > 0 ? (rollsNeeded * stripsInRoll) - stripsNeeded : 0;
         const singleScrap = rBoy - (stripsInRoll * stripH);
