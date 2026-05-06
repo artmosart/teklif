@@ -131,11 +131,10 @@
         const mExtra = parseFloat(document.getElementById('mExtra').value) || 0;
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
         const rBoy = parseFloat(document.getElementById('rLength').value);
-        const pRep = parseFloat(document.getElementById('pRepeat') ? document.getElementById('pRepeat').value : document.getElementById('pRepeat')?.value || 0) / 100 || 0;
+        const pRep = parseFloat(document.getElementById('pRepeat').value) / 100 || 0;
         const price = parseFloat(document.getElementById('uPrice').value) || 0;
         const exch = parseFloat(document.getElementById('exchange').value) || 1;
-        const gluePriceInput = parseFloat(document.getElementById('gluePrice').value);
-        const gluePrice = isNaN(gluePriceInput) ? 0 : gluePriceInput;
+        const gluePrice = parseFloat(document.getElementById('gluePrice').value) || 0;
         const labor = parseFloat(document.getElementById('labor').value) || 0;
         const kdv = parseFloat(document.getElementById('kdv').value);
 
@@ -157,16 +156,18 @@
         let scrapDetails = "";
         for(let i=1; i<=rollsNeeded; i++) scrapDetails += `${i}.Rulo:${singleScrap.toFixed(2)}m${i<rollsNeeded?', ':''}`;
 
-        // TUTKAL HESABI GÜNCELLENDİ: Rulo 0 ise Tutkal 0
-        const m2 = rollsNeeded * rEn * rBoy;
+        // TUTKAL HESABI KESİNLEŞTİRİLDİ
         let gWeight = 0;
+        let gCost = 0;
+        
         if (rollsNeeded > 0) {
+            const m2 = rollsNeeded * rEn * rBoy;
             gWeight = (m2 <= 5) ? 125 : (m2 <= 10) ? 250 : (m2 <= 16) ? 350 : (Math.floor(m2/16)*350 + (m2%16>10?350:m2%16>5?250:125));
+            gCost = (gWeight / 100) * gluePrice;
         }
         
         const mCost = rollsNeeded * price * exch;
         const lCost = rollsNeeded * labor;
-        const gCost = (gWeight / 100) * gluePrice;
 
         rows.push({
             name: document.getElementById('mName').value || "Mahal",
