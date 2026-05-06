@@ -2,120 +2,108 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>Eviçi Dekorasyon | Mobil Teklif</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eviçi Dekorasyon | Mobil Pro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #1e3a8a; --secondary: #0f172a; --accent: #059669; --bg: #f1f5f9; --danger: #ef4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #334155; -webkit-text-size-adjust: 100%; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #334155; }
         
         .container { width: 100%; max-width: 800px; margin: auto; }
-        .header { text-align: center; margin-bottom: 15px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .header { text-align: center; margin-bottom: 15px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 15px; }
         
-        h3 { margin-top: 0; font-size: 0.9rem; color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; text-transform: uppercase; }
-        label { display: block; font-size: 0.8rem; font-weight: 600; margin: 8px 0 4px; color: #64748b; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; background: #fff; color: #334155; }
+        h3 { margin-top: 0; font-size: 0.85rem; color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; text-transform: uppercase; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; margin: 8px 0 4px; color: #64748b; }
+        
+        /* Kutuların birbirine girmesini engelleyen düzenleme */
+        .input-row { display: flex; gap: 10px; width: 100%; }
+        .input-group { flex: 1; min-width: 0; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; background: #fff; }
 
         .sketch-container { display: flex; justify-content: center; padding: 20px 0; }
         .sketch-box { border: 2px solid #cbd5e1; width: 180px; height: 160px; position: relative; background: #fff; border-radius: 8px; }
-        .wall-input { position: absolute; width: 55px !important; text-align: center; padding: 6px !important; font-size: 0.8rem; height: 35px; margin-bottom: 0; }
+        .wall-input { position: absolute; width: 55px !important; text-align: center; padding: 6px !important; font-size: 0.8rem; height: 35px; }
         .top-w { top: 8px; left: 50%; transform: translateX(-50%); }
         .bottom-w { bottom: 8px; left: 50%; transform: translateX(-50%); }
         .left-w { left: -25px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
         .right-w { right: -25px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .door-entry { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; }
-        .door-arrow { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid var(--primary); margin: 0 auto; }
-
-        .btn { cursor: pointer; border: none; padding: 16px; border-radius: 8px; font-weight: bold; width: 100%; font-size: 1rem; }
-        .btn-add { background: var(--accent); color: white; margin-top: 10px; }
-        .btn-pdf { background: var(--secondary); color: white; margin-top: 15px; }
-        .btn-del { background: var(--danger); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; }
+        
+        .btn { cursor: pointer; border: none; padding: 16px; border-radius: 8px; font-weight: bold; width: 100%; font-size: 1rem; margin-top: 10px; }
+        .btn-add { background: var(--accent); color: white; }
+        .btn-pdf { background: var(--secondary); color: white; }
+        .btn-del { background: var(--danger); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; border: none; }
 
         .table-wrapper { width: 100%; overflow-x: auto; border-radius: 8px; background: white; }
-        .room-table { width: 100%; border-collapse: collapse; min-width: 550px; }
-        .room-table th, .room-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: center; font-size: 0.85rem; }
+        .room-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        .room-table th, .room-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: center; font-size: 0.8rem; }
         .room-table th { background: #f8fafc; color: var(--primary); }
 
-        .summary-box { margin-top: 15px; padding: 20px; background: var(--primary); color: white; border-radius: 12px; }
-        .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; }
-        .grand-total-row { font-size: 1.4rem; font-weight: 800; color: #fbbf24; border: none; margin-top: 10px; padding: 0; }
-        .scrap-detail { font-size: 0.7rem; color: #cbd5e1; font-style: italic; display: block; margin-top: 2px; }
+        .summary-box { margin-top: 15px; padding: 15px; background: var(--primary); color: white; border-radius: 12px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; }
+        .grand-total-row { font-size: 1.3rem; font-weight: 800; color: #fbbf24; border: none; margin-top: 8px; }
 
-        /* PDF TEMİZLİĞİ İÇİN ÖZEL ALAN */
-        #pdf-export-content { display: none; width: 100%; background: white; padding: 30px; font-family: sans-serif; }
-        .pdf-header { text-align: center; border-bottom: 3px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 25px; }
-        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .pdf-table th, .pdf-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 11pt; }
-        .pdf-table th { background-color: #f2f2f2; }
-        .pdf-summary { margin-top: 25px; padding: 20px; border: 2px solid #1e3a8a; border-radius: 10px; }
+        /* PDF Yazdırma Alanı - Görünürlük Sorunu Çözüldü */
+        #pdf-export-content { position: absolute; left: -9999px; top: 0; width: 650px; background: white; padding: 20px; }
+        .pdf-header { text-align: center; border-bottom: 2px solid #1e3a8a; margin-bottom: 20px; padding-bottom: 10px; }
+        .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .pdf-table th, .pdf-table td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 10pt; }
+        .pdf-summary { border: 1px solid #1e3a8a; padding: 15px; border-radius: 8px; }
 
-        @media (max-width: 600px) {
-            .grid-2 { display: grid; grid-template-columns: 1fr; }
-        }
-        @media print { .no-print { display: none !important; } }
+        @media (max-width: 600px) { .grid-mobile { display: grid; grid-template-columns: 1fr; gap: 0; } }
     </style>
 </head>
 <body>
 
-<div class="container no-print" id="main-ui">
+<div class="container no-print">
     <div class="header">
-        <h1 style="margin:0; color: var(--primary); font-size: 1.6rem;">EVİÇİ DEKORASYON</h1>
-        <p style="margin:4px 0 0 0; color: #64748b; font-size: 0.9rem;">Profesyonel Keşif & Maliyet Formu</p>
+        <h2 style="margin:0; color: var(--primary);">EVİÇİ DEKORASYON</h2>
+        <p style="margin:4px 0 0 0; color: #64748b; font-size: 0.8rem;">Profesyonel Keşif & Maliyet Formu</p>
     </div>
 
-    <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+    <div class="grid-mobile" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
         <div class="card">
             <h3>1. Rulo Ayarları</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><label>En (cm)</label><input type="number" id="rWidth" value="106"></div>
-                <div><label>Boy (m)</label><input type="number" id="rLength" value="15.6"></div>
+            <div class="input-row">
+                <div class="input-group"><label>En(cm)</label><input type="number" id="rWidth" value="106"></div>
+                <div class="input-group"><label>Boy(m)</label><input type="number" id="rLength" value="15.6"></div>
             </div>
             <label>Desen Tekrarı (cm)</label><input type="number" id="rRepeat" value="0">
         </div>
 
         <div class="card">
             <h3>2. Finansal</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><label>Kur</label><input type="number" id="exchange" value="1"></div>
-                <div><label>KDV</label>
-                    <select id="kdv">
-                        <option value="1.20" selected>%20</option>
-                        <option value="1.10">%10</option>
-                        <option value="1.00">%0</option>
-                    </select>
+            <div class="input-row">
+                <div class="input-group"><label>Kur</label><input type="number" id="exchange" value="1"></div>
+                <div class="input-group"><label>KDV</label>
+                    <select id="kdv"><option value="1.20" selected>%20</option><option value="1.10">%10</option><option value="1.00">%0</option></select>
                 </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><label>Tutkal(100g)</label><input type="number" id="gluePrice" value="150"></div>
-                <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
+            <div class="input-row">
+                <div class="input-group"><label>Tutkal</label><input type="number" id="gluePrice" value="150"></div>
+                <div class="input-group"><label>İşçilik</label><input type="number" id="labor" value="0"></div>
             </div>
+            <label>Birim Fiyat</label>
+            <div style="display: flex; gap: 5px;"><input type="number" id="uPrice" value="0"><select id="uCurr" style="width:70px"><option value="TRY">₺</option></select></div>
         </div>
     </div>
 
     <div class="card">
         <h3>3. Mahal Girişi</h3>
-        <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="grid-mobile" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div>
                 <label>Mahal & Kod</label>
-                <div style="display: flex; gap: 5px;">
-                    <input type="text" id="mName" placeholder="Salon">
-                    <input type="text" id="mCode" placeholder="Kod">
-                </div>
-                <label>Tavan Yüksekliği (m)</label><input type="number" id="mHeight" step="0.01" value="2.65">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div><label>Boşluk(m²)</label><input type="number" id="mVoid" value="0"></div>
-                    <div><label>İlave Area(+m²)</label><input type="number" id="mExtra" value="0"></div>
+                <div style="display: flex; gap: 5px;"><input type="text" id="mName" placeholder="Salon"><input type="text" id="mCode" placeholder="Kod"></div>
+                <label>Tavan Yüksekliği(m)</label><input type="number" id="mHeight" step="0.01" value="2.65">
+                <div class="input-row">
+                    <div class="input-group"><label>Boşluk(m²)</label><input type="number" id="mVoid" value="0"></div>
+                    <div class="input-group"><label>İlave(m²)</label><input type="number" id="mExtra" value="0"></div>
                 </div>
             </div>
             <div class="sketch-container">
                 <div class="sketch-box">
-                    <input type="number" id="w1" class="wall-input top-w" placeholder="Üst">
-                    <input type="number" id="w2" class="wall-input bottom-w" placeholder="Giriş">
-                    <input type="number" id="w3" class="wall-input left-w" placeholder="Sol">
-                    <input type="number" id="w4" class="wall-input right-w" placeholder="Sağ">
-                    <div class="door-entry"><div class="door-arrow"></div><div style="font-size:0.6rem; font-weight:bold; color:var(--primary)">KAPI</div></div>
+                    <input type="number" id="w1" class="wall-input top-w" placeholder="D1"><input type="number" id="w2" class="wall-input bottom-w" placeholder="Giriş"><input type="number" id="w3" class="wall-input left-w" placeholder="D3"><input type="number" id="w4" class="wall-input right-w" placeholder="D4">
                 </div>
             </div>
         </div>
@@ -123,178 +111,80 @@
     </div>
 
     <div class="card">
-        <h3>Metraj Analizi</h3>
-        <div class="table-wrapper">
-            <table class="room-table" id="resultTable">
-                <thead>
-                    <tr>
-                        <th>Mahal</th>
-                        <th>Rulo</th>
-                        <th>Artan (Boy)</th>
-                        <th>Fire (m)</th>
-                        <th>Maliyet</th>
-                        <th class="no-print">X</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
+        <div class="table-wrapper"><table class="room-table" id="resultTable"><thead><tr><th>Mahal</th><th>Rulo</th><th>Artan</th><th>Maliyet</th><th>X</th></tr></thead><tbody></tbody></table></div>
         <div class="summary-box" id="summaryCard">
-            <div class="summary-row"><span>Toplam Rulo:</span> <span id="sumRolls">0 Adet</span></div>
-            <div class="summary-row"><span>Malzeme:</span> <span id="sumMaterial">0 TL</span></div>
-            <div class="summary-row"><span>İşçilik:</span> <span id="sumLabor">0 TL</span></div>
-            <div class="summary-row"><span>Tutkal:</span> <span id="sumGlue">0 TL</span></div>
-            <div class="summary-row"><span>KDV:</span> <span id="sumKdv">0 TL</span></div>
-            <div class="summary-row grand-total-row"><span>GENEL TOPLAM:</span> <span id="sumGrandTotal">0 TL</span></div>
+            <div class="summary-row"><span>Rulo:</span> <span id="sumRolls">0</span></div>
+            <div class="summary-row"><span>Malzeme:</span> <span id="sumMaterial">0₺</span></div>
+            <div class="summary-row"><span>Tutkal:</span> <span id="sumGlue">0₺</span></div>
+            <div class="summary-row grand-total-row"><span>TOPLAM:</span> <span id="sumGrandTotal">0₺</span></div>
         </div>
         <button class="btn btn-pdf" onclick="exportPDF()">TEKLİFİ PDF KAYDET</button>
     </div>
 </div>
 
-<!-- GİZLİ PDF ÇIKTI ALANI (SADECE TABLO VE TOPLAM GÖRÜNÜR) -->
+<!-- GİZLİ PDF ÇIKTI ALANI -->
 <div id="pdf-export-content">
-    <div class="pdf-header">
-        <h1 style="color: #1e3a8a; margin: 0; font-size: 28pt;">EVİÇİ DEKORASYON</h1>
-        <p style="color: #64748b; margin: 5px 0; font-size: 14pt;">Keşif ve Maliyet Analiz Raporu</p>
-    </div>
+    <div class="pdf-header"><h1>EVİÇİ DEKORASYON</h1><p>Maliyet Analiz Raporu</p></div>
     <div id="pdf-table-area"></div>
     <div id="pdf-summary-area"></div>
-    <div style="margin-top: 40px; text-align: center; color: #999; font-size: 10pt;">
-        Kayseri | Eviçi Dekorasyon | "İçinizden geldiği gibi."
-    </div>
 </div>
 
 <script>
     let rows = [];
 
     function addProject() {
-        const name = document.getElementById('mName').value || "Mahal";
-        const code = document.getElementById('mCode').value || "-";
         const h = parseFloat(document.getElementById('mHeight').value);
-        const wTotal = (parseFloat(document.getElementById('w1').value) || 0) + 
-                       (parseFloat(document.getElementById('w2').value) || 0) + 
-                       (parseFloat(document.getElementById('w3').value) || 0) + 
-                       (parseFloat(document.getElementById('w4').value) || 0);
-        
-        const extraM2 = parseFloat(document.getElementById('mExtra').value) || 0;
+        const wTotal = (parseFloat(document.getElementById('w1').value) || 0) + (parseFloat(document.getElementById('w2').value) || 0) + (parseFloat(document.getElementById('w3').value) || 0) + (parseFloat(document.getElementById('w4').value) || 0);
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
         const rBoy = parseFloat(document.getElementById('rLength').value);
-        const rRep = parseFloat(document.getElementById('rRepeat').value) / 100;
         const price = parseFloat(document.getElementById('uPrice').value) || 0;
-        const exch = parseFloat(document.getElementById('exchange').value) || 1;
-        const laborUnit = parseFloat(document.getElementById('labor').value) || 0;
-        const glue100Price = parseFloat(document.getElementById('gluePrice').value) || 0;
+        const glue100Price = parseFloat(document.getElementById('gluePrice').value) || 150;
         const kdvRate = parseFloat(document.getElementById('kdv').value);
 
-        let workingH = h + 0.10; 
-        let stripH = rRep > 0 ? Math.ceil(workingH / rRep) * rRep : workingH;
-
-        const stripsNeeded = Math.ceil(wTotal / rEn) + Math.ceil(extraM2 / (rEn * h));
-        const stripsInRoll = Math.floor(rBoy / stripH);
+        const stripsNeeded = Math.ceil(wTotal / rEn);
+        const stripsInRoll = Math.floor(rBoy / (h + 0.10));
         const rollsNeeded = Math.ceil(stripsNeeded / stripsInRoll);
-
-        const fullStripsLeft = (rollsNeeded * stripsInRoll) - stripsNeeded;
-        const singleScrap = rBoy - (stripsInRoll * stripH);
+        const m2 = rollsNeeded * rEn * rBoy;
         
-        const totalM2 = rollsNeeded * (rEn * rBoy);
-        let totalGlueGr = 0;
-        const full16s = Math.floor(totalM2 / 16);
-        const remainder = totalM2 % 16;
-        totalGlueGr = full16s * 350;
-        if(remainder > 10) totalGlueGr += 350;
-        else if(remainder > 5) totalGlueGr += 250;
-        else if(remainder > 0) totalGlueGr += 125;
-
-        const matCost = rollsNeeded * price * exch;
-        const labCost = rollsNeeded * laborUnit;
-        const gluCost = (totalGlueGr / 100) * glue100Price;
-        const roomTotal = (matCost + labCost + gluCost) * kdvRate;
+        let glueGr = (m2 / 16) * 350;
+        const cost = (rollsNeeded * price + (glueGr/100)*glue100Price) * kdvRate;
 
         rows.push({
-            id: Date.now(), name, code, rollsNeeded, fullStripsLeft, singleScrap,
-            matCost, labCost, gluCost, roomTotal
+            name: document.getElementById('mName').value || "Mahal",
+            rolls: rollsNeeded,
+            left: (rollsNeeded * stripsInRoll) - stripsNeeded,
+            cost: cost,
+            glue: (glueGr/100)*glue100Price,
+            mat: rollsNeeded * price
         });
-        updateUI();
-    }
-
-    function removeProject(id) {
-        rows = rows.filter(r => r.id !== id);
         updateUI();
     }
 
     function updateUI() {
         const tbody = document.querySelector('#resultTable tbody');
-        const kdvRate = parseFloat(document.getElementById('kdv').value);
         tbody.innerHTML = "";
-        let tRolls = 0, tMat = 0, tLab = 0, tGlue = 0;
-
-        rows.forEach(r => {
-            tRolls += r.rollsNeeded; tMat += r.matCost; tLab += r.labCost; tGlue += r.gluCost;
-            tbody.innerHTML += `<tr>
-                <td><b>${r.name}</b><br><small>${r.code}</small></td>
-                <td>${r.rollsNeeded} Adet</td>
-                <td style="color:#b45309; font-weight:bold;">${r.fullStripsLeft} Boy</td>
-                <td><b>${(r.rollsNeeded * r.singleScrap).toFixed(2)}m</b></td>
-                <td style="font-weight:bold; color:var(--accent)">${r.roomTotal.toLocaleString('tr-TR')}₺</td>
-                <td class="no-print"><button class="btn-del" onclick="removeProject(${r.id})">✕</button></td>
-            </tr>`;
+        let tRolls = 0, tMat = 0, tGlue = 0;
+        rows.forEach((r, i) => {
+            tRolls += r.rolls; tMat += r.mat; tGlue += r.glue;
+            tbody.innerHTML += `<tr><td>${r.name}</td><td>${r.rolls}</td><td>${r.left} Boy</td><td>${r.cost.toLocaleString('tr-TR')}₺</td><td><button class="btn-del" onclick="rows.splice(${i},1);updateUI()">✕</button></td></tr>`;
         });
-
-        const subTotal = tMat + tLab + tGlue;
-        const kdvAmount = subTotal * (kdvRate - 1);
-        
-        document.getElementById('sumRolls').innerText = tRolls + " Adet";
-        document.getElementById('sumMaterial').innerText = tMat.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumLabor').innerText = tLab.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumGlue').innerText = tGlue.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumKdv').innerText = kdvAmount.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumGrandTotal').innerText = (subTotal * kdvRate).toLocaleString('tr-TR') + " TL";
+        document.getElementById('sumRolls').innerText = tRolls;
+        document.getElementById('sumMaterial').innerText = tMat.toLocaleString('tr-TR') + "₺";
+        document.getElementById('sumGlue').innerText = tGlue.toLocaleString('tr-TR') + "₺";
+        document.getElementById('sumGrandTotal').innerText = (tMat + tGlue).toLocaleString('tr-TR') + "₺";
     }
 
     function exportPDF() {
-        if(rows.length === 0) return alert("Listeye mahal eklemediniz!");
+        const area = document.getElementById('pdf-export-content');
+        area.style.left = "0px"; // Render için geçici görünürlük
         
-        // 1. PDF Alanını Hazırla
-        const tableArea = document.getElementById('pdf-table-area');
-        const summaryArea = document.getElementById('pdf-summary-area');
+        document.getElementById('pdf-table-area').innerHTML = document.getElementById('resultTable').outerHTML;
+        document.getElementById('pdf-table-area').querySelector('table').querySelectorAll('th:last-child, td:last-child').forEach(e => e.remove());
+        document.getElementById('pdf-summary-area').innerHTML = document.getElementById('summaryCard').outerHTML;
+
+        const opt = { margin: 10, filename: 'Evici-Teklif.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
         
-        // Tabloyu kopyala ve düzenle
-        const tableCopy = document.getElementById('resultTable').cloneNode(true);
-        tableCopy.removeAttribute('id');
-        tableCopy.className = 'pdf-table';
-        tableCopy.querySelectorAll('.no-print').forEach(el => el.remove());
-        tableArea.innerHTML = '';
-        tableArea.appendChild(tableCopy);
-        
-        // Özeti kopyala ve düzenle
-        const summaryCopy = document.getElementById('summaryCard').cloneNode(true);
-        summaryCopy.removeAttribute('id');
-        summaryCopy.style.backgroundColor = 'white';
-        summaryCopy.style.color = 'black';
-        summaryCopy.style.border = '2px solid #1e3a8a';
-        summaryCopy.querySelectorAll('.summary-row').forEach(row => {
-            row.style.borderBottom = '1px solid #eee';
-            row.style.color = 'black';
-        });
-        summaryArea.innerHTML = '';
-        summaryArea.appendChild(summaryCopy);
-
-        // 2. PDF Oluştur
-        const exportElement = document.getElementById('pdf-export-content');
-        exportElement.style.display = 'block';
-
-        const opt = {
-            margin: [10, 10],
-            filename: 'Evici-Dekorasyon-Teklif.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(exportElement).save().then(() => {
-            exportElement.style.display = 'none';
-        });
+        html2pdf().set(opt).from(area).save().then(() => { area.style.left = "-9999px"; });
     }
 </script>
 </body>
