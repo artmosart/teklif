@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eviçi Dekorasyon | Profesyonel Teklif Paneli</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --secondary: #0f172a; --accent: #059669; --bg: #f1f5f9; --danger: #ef4444; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #334155; }
+        .container { max-width: 950px; margin: auto; }
+        .header { text-align: center; margin-bottom: 20px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .full-width { grid-column: span 2; }
+        h3 { margin-top: 0; font-size: 0.85rem; color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; text-transform: uppercase; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; margin: 8px 0 4px; color: #64748b; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 0.9rem; }
+        .sketch-box { border: 2px solid #cbd5e1; height: 160px; position: relative; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 8px; margin-top: 10px; }
+        .wall-input { position: absolute; width: 60px !important; text-align: center; padding: 4px !important; }
+        .top-w { top: 8px; } .bottom-w { bottom: 8px; } .left-w { left: 8px; transform: rotate(-90deg); } .right-w { right: 8px; transform: rotate(90deg); }
+        .door-entry { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); text-align: center; }
+        .door-arrow { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid var(--primary); margin: auto; }
+        .btn { cursor: pointer; border: none; padding: 14px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-add { background: var(--accent); color: white; }
+        .btn-pdf { background: var(--secondary); color: white; }
+        .btn-del { background: var(--danger); color: white; border-radius: 5px; padding: 4px 8px; cursor: pointer; border:none; }
+        .room-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; table-layout: fixed; }
+        .room-table th, .room-table td { padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-size: 0.8rem; word-wrap: break-word; }
+        .room-table th { background: #f8fafc; color: var(--primary); }
+        .summary-box { margin-top: 20px; padding: 20px; background: var(--primary); color: white; border-radius: 12px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; }
+        .grand-total-row { font-size: 1.3rem; font-weight: 800; color: #fbbf24; border: none; margin-top: 8px; }
+        .scrap-detail { font-size: 0.65rem; color: #666; font-style: italic; display: block; margin-top: 3px; }
+        @media print { .no-print { display: none !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container" id="printable-area">
+    <div class="header">
+        <h2 style="margin:0; color: var(--primary); font-size: 1.4rem;">EVİÇİ DEKORASYON</h2>
+        <p style="margin:3px 0 0 0; color: #64748b; font-size: 0.8rem;">Kayseri | Profesyonel Keşif ve Maliyet Analizi</p>
+    </div>
+
+    <div class="main-grid">
+        <div class="card no-print">
+            <h3>1. Rulo & Teknik</h3>
+            <label>Rulo Eni (cm)</label><input type="number" id="rWidth" value="106">
+            <label>Rulo Boyu (m)</label><input type="number" id="rLength" value="15.6">
+            <label>Desen Tekrarı (cm)</label><input type="number" id="rRepeat" value="0">
+        </div>
+
+        <div class="card no-print">
+            <h3>2. Finansal & Tutkal</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div><label>Döviz Kuru</label><input type="number" id="exchange" value="1"></div>
+                <div><label>KDV</label>
+                    <select id="kdv">
+                        <option value="1.20" selected>%20</option>
+                        <option value="1.10">%10</option>
+                        <option value="1.00">%0</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div><label>Tutkal (100g/TL)</label><input type="number" id="gluePrice" value="150"></div>
+                <div><label>İşçilik (Rulo/TL)</label><input type="number" id="labor" value="0"></div>
+            </div>
+            <label>Rulo Fiyatı</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="uPrice" value="0">
+                <select id="uCurr" style="width: 70px;"><option value="TRY">₺</option><option value="USD">$</option><option value="EUR">€</option></select>
+            </div>
+        </div>
+
+        <div class="card full-width no-print">
+            <h3>3. Mahal Girişi</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Mahal & Kod</label>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="text" id="mName" placeholder="Salon">
+                        <input type="text" id="mCode" placeholder="Kod">
+                    </div>
+                    <label>Tavan Yüksekliği (m)</label><input type="number" id="mHeight" step="0.01" value="2.65">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div><label>Boşluk (-m²)</label><input type="number" id="mVoid" value="0"></div>
+                        <div><label>İlave Area (+m²)</label><input type="number" id="mExtra" value="0"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="sketch-box">
+                        <input type="number" id="w1" class="wall-input top-w" placeholder="D1">
+                        <input type="number" id="w2" class="wall-input bottom-w" placeholder="D2">
+                        <input type="number" id="w3" class="wall-input left-w" placeholder="D3">
+                        <input type="number" id="w4" class="wall-input right-w" placeholder="D4">
+                        <div class="door-entry"><div class="door-arrow"></div><div style="font-size:0.55rem; font-weight:bold; color:var(--primary)">KAPI</div></div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-add" onclick="addProject()">LİSTEYE EKLE</button>
+        </div>
+
+        <div class="card full-width">
+            <h3>Metraj ve Analiz</h3>
+            <table class="room-table" id="resultTable">
+                <thead>
+                    <tr>
+                        <th style="width:25%">Mahal</th>
+                        <th>Rulo</th>
+                        <th>Artan (Boy)</th>
+                        <th style="width:25%">Fire (m)</th>
+                        <th style="width:20%">Maliyet</th>
+                        <th class="no-print">X</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="summary-box" id="summaryCard">
+                <div class="summary-row"><span>Toplam Rulo:</span> <span id="sumRolls">0 Adet</span></div>
+                <div class="summary-row"><span>Malzeme:</span> <span id="sumMaterial">0 TL</span></div>
+                <div class="summary-row"><span>İşçilik:</span> <span id="sumLabor">0 TL</span></div>
+                <div class="summary-row"><span>Tutkal:</span> <span id="sumGlue">0 TL</span></div>
+                <div class="summary-row"><span>KDV:</span> <span id="sumKdv">0 TL</span></div>
+                <div class="summary-row grand-total-row"><span>TOPLAM:</span> <span id="sumGrandTotal">0 TL</span></div>
+            </div>
+            <button class="btn btn-pdf no-print" onclick="exportPDF()">PDF KAYDET</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let rows = [];
+
+    function addProject() {
+        const name = document.getElementById('mName').value || "Mahal";
+        const code = document.getElementById('mCode').value || "-";
+        const h = parseFloat(document.getElementById('mHeight').value);
+        const wTotal = (parseFloat(document.getElementById('w1').value) || 0) + 
+                       (parseFloat(document.getElementById('w2').value) || 0) + 
+                       (parseFloat(document.getElementById('w3').value) || 0) + 
+                       (parseFloat(document.getElementById('w4').value) || 0);
+        
+        const extraM2 = parseFloat(document.getElementById('mExtra').value) || 0;
+        const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
+        const rBoy = parseFloat(document.getElementById('rLength').value);
+        const rRep = parseFloat(document.getElementById('rRepeat').value) / 100;
+        const price = parseFloat(document.getElementById('uPrice').value) || 0;
+        const exch = parseFloat(document.getElementById('exchange').value) || 1;
+        const laborUnit = parseFloat(document.getElementById('labor').value) || 0;
+        const glue100Price = parseFloat(document.getElementById('gluePrice').value) || 0;
+        const kdvRate = parseFloat(document.getElementById('kdv').value);
+
+        let workingH = h + 0.10; 
+        let stripH = rRep > 0 ? Math.ceil(workingH / rRep) * rRep : workingH;
+
+        const stripsNeeded = Math.ceil(wTotal / rEn) + Math.ceil(extraM2 / (rEn * h));
+        const stripsInRoll = Math.floor(rBoy / stripH);
+        const rollsNeeded = Math.ceil(stripsNeeded / stripsInRoll);
+
+        const fullStripsLeft = (rollsNeeded * stripsInRoll) - stripsNeeded;
+        const singleScrap = rBoy - (stripsInRoll * stripH);
+        
+        let scrapDetails = "";
+        for(let i=1; i<=rollsNeeded; i++) {
+            scrapDetails += `${i}. Rulo: ${singleScrap.toFixed(2)}m${i < rollsNeeded ? ', ' : ''}`;
+        }
+
+        const totalM2 = rollsNeeded * (rEn * rBoy);
+        let totalGlueGr = 0;
+        const full16s = Math.floor(totalM2 / 16);
+        const remainder = totalM2 % 16;
+        totalGlueGr = full16s * 350;
+        if(remainder > 10) totalGlueGr += 350;
+        else if(remainder > 5) totalGlueGr += 250;
+        else if(remainder > 0) totalGlueGr += 125;
+
+        const matCost = rollsNeeded * price * exch;
+        const labCost = rollsNeeded * laborUnit;
+        const gluCost = (totalGlueGr / 100) * glue100Price;
+        const roomTotal = (matCost + labCost + gluCost) * kdvRate;
+
+        rows.push({
+            id: Date.now(), name, code, rollsNeeded, fullStripsLeft, singleScrap, scrapDetails,
+            materialCost: matCost, laborCost: labCost, glueCost: gluCost, roomTotalWithKdv: roomTotal
+        });
+        updateUI();
+    }
+
+    function removeProject(id) {
+        rows = rows.filter(r => r.id !== id);
+        updateUI();
+    }
+
+    function updateUI() {
+        const tbody = document.querySelector('#resultTable tbody');
+        const kdvRate = parseFloat(document.getElementById('kdv').value);
+        tbody.innerHTML = "";
+        let tRolls = 0, tMat = 0, tLab = 0, tGlue = 0;
+
+        rows.forEach(r => {
+            tRolls += r.rollsNeeded; tMat += r.materialCost; tLab += r.laborCost; tGlue += r.glueCost;
+            tbody.innerHTML += `<tr>
+                <td><b>${r.name}</b><br><small>${r.code}</small></td>
+                <td>${r.rollsNeeded} Ad.</td>
+                <td style="color:#b45309; font-weight:bold;">${r.fullStripsLeft} Boy</td>
+                <td><b>${(r.rollsNeeded * r.singleScrap).toFixed(2)}m</b><br><span class="scrap-detail">${r.scrapDetails}</span></td>
+                <td style="font-weight:bold; color:var(--accent)">${r.roomTotalWithKdv.toLocaleString('tr-TR')} TL</td>
+                <td class="no-print"><button class="btn-del" onclick="removeProject(${r.id})">✕</button></td>
+            </tr>`;
+        });
+
+        const subTotal = tMat + tLab + tGlue;
+        const kdvAmount = subTotal * (kdvRate - 1);
+        
+        document.getElementById('sumRolls').innerText = tRolls + " Adet";
+        document.getElementById('sumMaterial').innerText = tMat.toLocaleString('tr-TR') + " TL";
+        document.getElementById('sumLabor').innerText = tLab.toLocaleString('tr-TR') + " TL";
+        document.getElementById('sumGlue').innerText = tGlue.toLocaleString('tr-TR') + " TL";
+        document.getElementById('sumKdv').innerText = kdvAmount.toLocaleString('tr-TR') + " TL";
+        document.getElementById('sumGrandTotal').innerText = (subTotal * kdvRate).toLocaleString('tr-TR') + " TL";
+    }
+
+    function exportPDF() {
+        const element = document.getElementById('printable-area');
+        const opt = {
+            margin: [5, 5, 5, 5],
+            filename: 'Evici_Teklif.pdf',
+            html2canvas: { scale: 3, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+</body>
+</html>
