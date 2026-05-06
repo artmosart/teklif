@@ -121,23 +121,27 @@
 
     function addProject() {
         const h = parseFloat(document.getElementById('mHeight').value);
-        const wTotal = (parseFloat(document.getElementById('w1').value) || 0) + (parseFloat(document.getElementById('w2').value) || 0) + (parseFloat(document.getElementById('w3').value) || 0) + (parseFloat(document.getElementById('w4').value) || 0);
+        const w1 = parseFloat(document.getElementById('w1').value) || 0;
+        const w2 = parseFloat(document.getElementById('w2').value) || 0;
+        const w3 = parseFloat(document.getElementById('w3').value) || 0;
+        const w4 = parseFloat(document.getElementById('w4').value) || 0;
+        const wTotal = w1 + w2 + w3 + w4;
+        
         const mVoid = parseFloat(document.getElementById('mVoid').value) || 0;
         const mExtra = parseFloat(document.getElementById('mExtra').value) || 0;
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
         const rBoy = parseFloat(document.getElementById('rLength').value);
-        const pRep = parseFloat(document.getElementById('pRepeat').value) / 100 || 0;
+        const pRep = parseFloat(document.getElementById('pRepeat') ? document.getElementById('pRepeat').value : document.getElementById('pRepeat')?.value || 0) / 100 || 0;
         const price = parseFloat(document.getElementById('uPrice').value) || 0;
         const exch = parseFloat(document.getElementById('exchange').value) || 1;
-        const gluePrice = parseFloat(document.getElementById('gluePrice').value) || 150;
+        const gluePriceInput = parseFloat(document.getElementById('gluePrice').value);
+        const gluePrice = isNaN(gluePriceInput) ? 0 : gluePriceInput;
         const labor = parseFloat(document.getElementById('labor').value) || 0;
         const kdv = parseFloat(document.getElementById('kdv').value);
 
-        // Şerit boyu hesabı: Tavan + Pay + Desen Tekrarı
         const stripH = h + 0.10 + pRep;
         const stripsInRoll = Math.floor(rBoy / stripH);
         
-        // Boy ihtiyacı hesabı
         const stripsFromWalls = Math.ceil(wTotal / rEn);
         const stripsFromExtra = Math.ceil(mExtra / (rEn * h));
         const stripsSavedFromVoid = Math.floor(mVoid / (rEn * h));
@@ -153,8 +157,12 @@
         let scrapDetails = "";
         for(let i=1; i<=rollsNeeded; i++) scrapDetails += `${i}.Rulo:${singleScrap.toFixed(2)}m${i<rollsNeeded?', ':''}`;
 
+        // TUTKAL HESABI GÜNCELLENDİ: Rulo 0 ise Tutkal 0
         const m2 = rollsNeeded * rEn * rBoy;
-        let gWeight = (m2 <= 5) ? 125 : (m2 <= 10) ? 250 : (m2 <= 16) ? 350 : (Math.floor(m2/16)*350 + (m2%16>10?350:m2%16>5?250:125));
+        let gWeight = 0;
+        if (rollsNeeded > 0) {
+            gWeight = (m2 <= 5) ? 125 : (m2 <= 10) ? 250 : (m2 <= 16) ? 350 : (Math.floor(m2/16)*350 + (m2%16>10?350:m2%16>5?250:125));
+        }
         
         const mCost = rollsNeeded * price * exch;
         const lCost = rollsNeeded * labor;
