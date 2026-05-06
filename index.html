@@ -134,12 +134,25 @@
         const stripH = h + 0.10;
         const stripsInRoll = Math.floor(rBoy / stripH);
         
-        // Net Metraj Hesabı: Duvar alanı - Boşluklar + İlave Alanlar
-        const netWallWidth = wTotal + (mExtra / h) - (mVoid / h);
-        const stripsNeeded = Math.ceil(netWallWidth / rEn);
+        // --- YENİ HESAPLAMA MANTIĞI ---
+        // 1. Duvar ölçülerinden gelen toplam boy sayısı
+        const stripsFromWalls = Math.ceil(wTotal / rEn);
+        
+        // 2. İlave alandan gelen boy sayısı (+)
+        const stripsFromExtra = Math.ceil(mExtra / (rEn * h));
+        
+        // 3. Boşluktan tasarruf edilen boy sayısı (-)
+        // Kaç tam boy tasarruf ettiğimizi hesaplıyoruz
+        const stripsSavedFromVoid = Math.floor(mVoid / (rEn * h));
+        
+        // 4. Net gereken boy sayısı
+        let stripsNeeded = (stripsFromWalls + stripsFromExtra) - stripsSavedFromVoid;
+        if(stripsNeeded < 0) stripsNeeded = 0; // Negatif olamaz
+
+        // 5. Rulo hesabı
         const rollsNeeded = Math.ceil(stripsNeeded / stripsInRoll);
         
-        const fullStripsLeft = (rollsNeeded * stripsInRoll) - stripsNeeded;
+        const fullStripsLeft = rollsNeeded > 0 ? (rollsNeeded * stripsInRoll) - stripsNeeded : 0;
         const singleScrap = rBoy - (stripsInRoll * stripH);
         
         let scrapDetails = "";
