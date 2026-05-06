@@ -54,16 +54,31 @@
             </div>
             <div class="input-row">
                 <div><label>Döviz Kuru</label><input type="number" id="exchange" value="1"></div>
-                <div><label>KDV</label><select id="kdv"><option value="1.20" selected>%20</option><option value="1.00">%0</option></select></div>
+                <div><label>KDV</label>
+                    <select id="kdv">
+                        <option value="1.20" selected>%20</option>
+                        <option value="1.10">%10</option>
+                        <option value="1.00">%0</option>
+                    </select>
+                </div>
             </div>
             <div class="input-row">
                 <div><label>Tutkal(100g/TL)</label><input type="number" id="gluePrice" value="150"></div>
                 <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
             </div>
-            <label>Birim Rulo Fiyatı & Birim</label>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" id="uPrice" value="0">
-                <select id="uCurr" style="width: 80px;"><option value="TRY">₺</option><option value="USD">$</option><option value="EUR">€</option></select>
+            <div class="input-row">
+                <div>
+                    <label>Rulo Fiyatı</label>
+                    <input type="number" id="uPrice" value="0">
+                </div>
+                <div>
+                    <label>Para Birimi</label>
+                    <select id="uCurr">
+                        <option value="TRY">₺</option>
+                        <option value="USD">$</option>
+                        <option value="EUR">€</option>
+                    </select>
+                </div>
             </div>
         </div>
 
