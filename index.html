@@ -53,14 +53,18 @@
                 <div><label>Rulo Boy(m)</label><input type="number" id="rLength" value="15.6"></div>
             </div>
             <div class="input-row">
-                <div><label>Kur</label><input type="number" id="exchange" value="1"></div>
+                <div><label>Döviz Kuru</label><input type="number" id="exchange" value="1"></div>
                 <div><label>KDV</label><select id="kdv"><option value="1.20" selected>%20</option><option value="1.00">%0</option></select></div>
             </div>
             <div class="input-row">
                 <div><label>Tutkal(100g/TL)</label><input type="number" id="gluePrice" value="150"></div>
                 <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
             </div>
-            <label>Birim Rulo Fiyatı (TRY)</label><input type="number" id="uPrice" value="0">
+            <label>Birim Rulo Fiyatı & Birim</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="uPrice" value="0">
+                <select id="uCurr" style="width: 80px;"><option value="TRY">₺</option><option value="USD">$</option><option value="EUR">€</option></select>
+            </div>
         </div>
 
         <div class="card">
@@ -110,6 +114,7 @@
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
         const rBoy = parseFloat(document.getElementById('rLength').value);
         const price = parseFloat(document.getElementById('uPrice').value) || 0;
+        const exch = parseFloat(document.getElementById('exchange').value) || 1;
         const gluePrice = parseFloat(document.getElementById('gluePrice').value) || 150;
         const labor = parseFloat(document.getElementById('labor').value) || 0;
         const kdv = parseFloat(document.getElementById('kdv').value);
@@ -128,7 +133,7 @@
         const m2 = rollsNeeded * rEn * rBoy;
         let gWeight = (m2 <= 5) ? 125 : (m2 <= 10) ? 250 : (m2 <= 16) ? 350 : (Math.floor(m2/16)*350 + (m2%16>10?350:m2%16>5?250:125));
         
-        const mCost = rollsNeeded * price;
+        const mCost = rollsNeeded * price * exch;
         const lCost = rollsNeeded * labor;
         const gCost = (gWeight / 100) * gluePrice;
 
@@ -146,7 +151,6 @@
         const tbody = document.querySelector('#resultTable tbody');
         tbody.innerHTML = "";
         let tRolls=0, tMat=0, tLab=0, tGlue=0, tGrand=0;
-        const kdv = parseFloat(document.getElementById('kdv').value);
 
         rows.forEach((r, i) => {
             tRolls += r.rolls; tMat += r.mCost; tLab += r.lCost; tGlue += r.gCost; tGrand += r.total;
@@ -165,11 +169,10 @@
         if(rows.length === 0) return alert("Listeye mahal ekleyin!");
         const element = document.getElementById('main-app');
         const opt = { margin: 5, filename: 'Evici-Teklif.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-        // PDF sırasında inputları gizle, sonra geri getir
+        
         document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
         html2pdf().set(opt).from(element).save().then(() => {
             document.querySelectorAll('.no-print').forEach(el => el.style.display = 'block');
-            // iOS uyumluluğu için tabloyu tekrar zorla göster
             updateUI();
         });
     }
