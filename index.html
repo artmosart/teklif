@@ -121,12 +121,7 @@
 
     function addProject() {
         const h = parseFloat(document.getElementById('mHeight').value);
-        const w1 = parseFloat(document.getElementById('w1').value) || 0;
-        const w2 = parseFloat(document.getElementById('w2').value) || 0;
-        const w3 = parseFloat(document.getElementById('w3').value) || 0;
-        const w4 = parseFloat(document.getElementById('w4').value) || 0;
-        const wTotal = w1 + w2 + w3 + w4;
-        
+        const wTotal = (parseFloat(document.getElementById('w1').value) || 0) + (parseFloat(document.getElementById('w2').value) || 0) + (parseFloat(document.getElementById('w3').value) || 0) + (parseFloat(document.getElementById('w4').value) || 0);
         const mVoid = parseFloat(document.getElementById('mVoid').value) || 0;
         const mExtra = parseFloat(document.getElementById('mExtra').value) || 0;
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
@@ -156,16 +151,23 @@
         let scrapDetails = "";
         for(let i=1; i<=rollsNeeded; i++) scrapDetails += `${i}.Rulo:${singleScrap.toFixed(2)}m${i<rollsNeeded?', ':''}`;
 
-        // TUTKAL HESABI KESİNLEŞTİRİLDİ
-        let gWeight = 0;
-        let gCost = 0;
-        
+        // --- TUTKAL HESABI SİZİN VERDİĞİNİZ BAREMLERE GÖRE GÜNCELLENDİ ---
+        let totalGrams = 0;
         if (rollsNeeded > 0) {
-            const m2 = rollsNeeded * rEn * rBoy;
-            gWeight = (m2 <= 5) ? 125 : (m2 <= 10) ? 250 : (m2 <= 16) ? 350 : (Math.floor(m2/16)*350 + (m2%16>10?350:m2%16>5?250:125));
-            gCost = (gWeight / 100) * gluePrice;
+            // Sadece kullanılan kağıdın net m2'sini buluyoruz (stripsNeeded baz alınarak)
+            const netM2Used = stripsNeeded * rEn * h; 
+            
+            if (rollsNeeded === 1) {
+                if (netM2Used <= 5) totalGrams = 125;
+                else if (netM2Used <= 10) totalGrams = 250;
+                else totalGrams = 350; // 10-16.5m2 arası
+            } else {
+                // Birden fazla rulo varsa, her rulo için usta kabulü 350 gram
+                totalGrams = rollsNeeded * 350;
+            }
         }
         
+        const gCost = (totalGrams / 100) * gluePrice;
         const mCost = rollsNeeded * price * exch;
         const lCost = rollsNeeded * labor;
 
@@ -190,11 +192,11 @@
         });
 
         document.getElementById('sumRolls').innerText = tRolls + " Adet";
-        document.getElementById('sumMaterial').innerText = tMat.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumLabor').innerText = tLab.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumGlue').innerText = tGlue.toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumKdv').innerText = (tGrand - (tMat+tLab+tGlue)).toLocaleString('tr-TR') + " TL";
-        document.getElementById('sumGrandTotal').innerText = tGrand.toLocaleString('tr-TR') + " TL";
+        document.getElementById('sumMaterial').innerText = tMat.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + " TL";
+        document.getElementById('sumLabor').innerText = tLab.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + " TL";
+        document.getElementById('sumGlue').innerText = tGlue.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + " TL";
+        document.getElementById('sumKdv').innerText = (tGrand - (tMat+tLab+tGlue)).toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + " TL";
+        document.getElementById('sumGrandTotal').innerText = tGrand.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + " TL";
     }
 
     function exportPDF() {
