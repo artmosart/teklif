@@ -2,36 +2,69 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eviçi Dekorasyon | Profesyonel Teklif Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eviçi Dekorasyon | Mobil Pro Panel</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #1e3a8a; --secondary: #0f172a; --accent: #059669; --bg: #f1f5f9; --danger: #ef4444; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #334155; }
-        .container { max-width: 950px; margin: auto; }
-        .header { text-align: center; margin-bottom: 20px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #334155; line-height: 1.4; }
+        
+        .container { max-width: 900px; margin: auto; }
+        
+        .header { text-align: center; margin-bottom: 15px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: fit-content; }
+        
         .full-width { grid-column: span 2; }
-        h3 { margin-top: 0; font-size: 0.85rem; color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; text-transform: uppercase; }
+        
+        h3 { margin-top: 0; font-size: 0.85rem; color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; text-transform: uppercase; }
+        
         label { display: block; font-size: 0.75rem; font-weight: 600; margin: 8px 0 4px; color: #64748b; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 0.9rem; }
-        .sketch-box { border: 2px solid #cbd5e1; height: 160px; position: relative; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 8px; margin-top: 10px; }
-        .wall-input { position: absolute; width: 60px !important; text-align: center; padding: 4px !important; }
-        .top-w { top: 8px; } .bottom-w { bottom: 8px; } .left-w { left: 8px; transform: rotate(-90deg); } .right-w { right: 8px; transform: rotate(90deg); }
-        .door-entry { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); text-align: center; }
-        .door-arrow { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid var(--primary); margin: auto; }
-        .btn { cursor: pointer; border: none; padding: 14px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 10px; }
-        .btn-add { background: var(--accent); color: white; }
-        .btn-pdf { background: var(--secondary); color: white; }
-        .btn-del { background: var(--danger); color: white; border-radius: 5px; padding: 4px 8px; cursor: pointer; border:none; }
-        .room-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; table-layout: fixed; }
-        .room-table th, .room-table td { padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-size: 0.8rem; word-wrap: break-word; }
-        .room-table th { background: #f8fafc; color: var(--primary); }
-        .summary-box { margin-top: 20px; padding: 20px; background: var(--primary); color: white; border-radius: 12px; }
+        
+        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; /* Mobil odaklanmada zoom yapmaması için 16px */ background: #fff; }
+
+        /* Röleve Şeması Tasarımı */
+        .sketch-container { display: flex; justify-content: center; padding: 10px 0; }
+        .sketch-box { border: 2px solid #cbd5e1; width: 180px; height: 160px; position: relative; background: #fff; border-radius: 8px; flex-shrink: 0; }
+        .wall-input { position: absolute; width: 55px !important; text-align: center; padding: 4px !important; font-size: 0.8rem; }
+        .top-w { top: 8px; left: 50%; transform: translateX(-50%); }
+        .bottom-w { bottom: 8px; left: 50%; transform: translateX(-50%); }
+        .left-w { left: -20px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+        .right-w { right: -20px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+        
+        .door-entry { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; }
+        .door-arrow { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid var(--primary); margin: 0 auto; }
+
+        .btn { cursor: pointer; border: none; padding: 14px; border-radius: 8px; font-weight: bold; width: 100%; font-size: 0.95rem; transition: 0.2s; }
+        .btn-add { background: var(--accent); color: white; margin-top: 15px; }
+        .btn-pdf { background: var(--secondary); color: white; margin-top: 15px; }
+        .btn-del { background: var(--danger); color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
+
+        /* Mobil Tablo Düzenlemesi */
+        .table-wrapper { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .room-table { width: 100%; border-collapse: collapse; background: white; min-width: 500px; /* Mobilde daralmayı önler */ }
+        .room-table th, .room-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: center; font-size: 0.8rem; }
+        .room-table th { background: #f8fafc; color: var(--primary); font-weight: bold; }
+
+        /* Özet Kutusu */
+        .summary-box { margin-top: 15px; padding: 15px; background: var(--primary); color: white; border-radius: 12px; }
         .summary-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; }
-        .grand-total-row { font-size: 1.3rem; font-weight: 800; color: #fbbf24; border: none; margin-top: 8px; }
-        .scrap-detail { font-size: 0.65rem; color: #666; font-style: italic; display: block; margin-top: 3px; }
+        .grand-total-row { font-size: 1.3rem; font-weight: 800; color: #fbbf24; border: none; margin-top: 8px; padding: 0; }
+        .scrap-detail { font-size: 0.65rem; color: #cbd5e1; font-style: italic; display: block; margin-top: 2px; }
+
+        /* RESPONSIVE AYARLAR */
+        @media (max-width: 600px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .mahal-input-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+            .sketch-container { margin-top: 20px; margin-bottom: 10px; }
+        }
+
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
@@ -39,22 +72,24 @@
 
 <div class="container" id="printable-area">
     <div class="header">
-        <h2 style="margin:0; color: var(--primary); font-size: 1.4rem;">EVİÇİ DEKORASYON</h2>
-        <p style="margin:3px 0 0 0; color: #64748b; font-size: 0.8rem;">Kayseri | Profesyonel Keşif ve Maliyet Analizi</p>
+        <h2 style="margin:0; color: var(--primary); font-size: 1.3rem;">EVİÇİ DEKORASYON</h2>
+        <p style="margin:4px 0 0 0; color: #64748b; font-size: 0.75rem;">Profesyonel Keşif & Maliyet Formu</p>
     </div>
 
     <div class="main-grid">
         <div class="card no-print">
             <h3>1. Rulo & Teknik</h3>
-            <label>Rulo Eni (cm)</label><input type="number" id="rWidth" value="106">
-            <label>Rulo Boyu (m)</label><input type="number" id="rLength" value="15.6">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><label>En (cm)</label><input type="number" id="rWidth" value="106"></div>
+                <div><label>Boy (m)</label><input type="number" id="rLength" value="15.6"></div>
+            </div>
             <label>Desen Tekrarı (cm)</label><input type="number" id="rRepeat" value="0">
         </div>
 
         <div class="card no-print">
-            <h3>2. Finansal & Tutkal</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div><label>Döviz Kuru</label><input type="number" id="exchange" value="1"></div>
+            <h3>2. Finansal Ayarlar</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><label>Kur</label><input type="number" id="exchange" value="1"></div>
                 <div><label>KDV</label>
                     <select id="kdv">
                         <option value="1.20" selected>%20</option>
@@ -63,9 +98,9 @@
                     </select>
                 </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div><label>Tutkal (100g/TL)</label><input type="number" id="gluePrice" value="150"></div>
-                <div><label>İşçilik (Rulo/TL)</label><input type="number" id="labor" value="0"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><label>Tutkal(100g)</label><input type="number" id="gluePrice" value="150"></div>
+                <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
             </div>
             <label>Rulo Fiyatı</label>
             <div style="display: flex; gap: 5px;">
@@ -76,7 +111,7 @@
 
         <div class="card full-width no-print">
             <h3>3. Mahal Girişi</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="mahal-input-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     <label>Mahal & Kod</label>
                     <div style="display: flex; gap: 5px;">
@@ -84,18 +119,18 @@
                         <input type="text" id="mCode" placeholder="Kod">
                     </div>
                     <label>Tavan Yüksekliği (m)</label><input type="number" id="mHeight" step="0.01" value="2.65">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div><label>Boşluk (-m²)</label><input type="number" id="mVoid" value="0"></div>
-                        <div><label>İlave Area (+m²)</label><input type="number" id="mExtra" value="0"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div><label>Boşluk(m²)</label><input type="number" id="mVoid" value="0"></div>
+                        <div><label>İlave(m²)</label><input type="number" id="mExtra" value="0"></div>
                     </div>
                 </div>
-                <div>
+                <div class="sketch-container">
                     <div class="sketch-box">
-                        <input type="number" id="w1" class="wall-input top-w" placeholder="D1">
-                        <input type="number" id="w2" class="wall-input bottom-w" placeholder="D2">
-                        <input type="number" id="w3" class="wall-input left-w" placeholder="D3">
-                        <input type="number" id="w4" class="wall-input right-w" placeholder="D4">
-                        <div class="door-entry"><div class="door-arrow"></div><div style="font-size:0.55rem; font-weight:bold; color:var(--primary)">KAPI</div></div>
+                        <input type="number" id="w1" class="wall-input top-w" placeholder="Üst">
+                        <input type="number" id="w2" class="wall-input bottom-w" placeholder="Giriş">
+                        <input type="number" id="w3" class="wall-input left-w" placeholder="Sol">
+                        <input type="number" id="w4" class="wall-input right-w" placeholder="Sağ">
+                        <div class="door-entry"><div class="door-arrow"></div><div style="font-size:0.6rem; font-weight:bold; color:var(--primary)">KAPI</div></div>
                     </div>
                 </div>
             </div>
@@ -104,19 +139,21 @@
 
         <div class="card full-width">
             <h3>Metraj ve Analiz</h3>
-            <table class="room-table" id="resultTable">
-                <thead>
-                    <tr>
-                        <th style="width:25%">Mahal</th>
-                        <th>Rulo</th>
-                        <th>Artan (Boy)</th>
-                        <th style="width:25%">Fire (m)</th>
-                        <th style="width:20%">Maliyet</th>
-                        <th class="no-print">X</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-wrapper">
+                <table class="room-table" id="resultTable">
+                    <thead>
+                        <tr>
+                            <th style="width:100px">Mahal</th>
+                            <th>Rulo</th>
+                            <th>Artan (Boy)</th>
+                            <th>Fire (m)</th>
+                            <th style="width:100px">Maliyet</th>
+                            <th class="no-print">X</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
 
             <div class="summary-box" id="summaryCard">
                 <div class="summary-row"><span>Toplam Rulo:</span> <span id="sumRolls">0 Adet</span></div>
@@ -165,7 +202,7 @@
         
         let scrapDetails = "";
         for(let i=1; i<=rollsNeeded; i++) {
-            scrapDetails += `${i}. Rulo: ${singleScrap.toFixed(2)}m${i < rollsNeeded ? ', ' : ''}`;
+            scrapDetails += `${i}.Rulo:${singleScrap.toFixed(2)}m${i < rollsNeeded ? ', ' : ''}`;
         }
 
         const totalM2 = rollsNeeded * (rEn * rBoy);
@@ -204,10 +241,10 @@
             tRolls += r.rollsNeeded; tMat += r.materialCost; tLab += r.laborCost; tGlue += r.glueCost;
             tbody.innerHTML += `<tr>
                 <td><b>${r.name}</b><br><small>${r.code}</small></td>
-                <td>${r.rollsNeeded} Ad.</td>
-                <td style="color:#b45309; font-weight:bold;">${r.fullStripsLeft} Boy</td>
+                <td>${r.rollsNeeded}</td>
+                <td style="color:#b45309; font-weight:bold;">${r.fullStripsLeft}</td>
                 <td><b>${(r.rollsNeeded * r.singleScrap).toFixed(2)}m</b><br><span class="scrap-detail">${r.scrapDetails}</span></td>
-                <td style="font-weight:bold; color:var(--accent)">${r.roomTotalWithKdv.toLocaleString('tr-TR')} TL</td>
+                <td style="font-weight:bold; color:var(--accent)">${r.roomTotalWithKdv.toLocaleString('tr-TR')}₺</td>
                 <td class="no-print"><button class="btn-del" onclick="removeProject(${r.id})">✕</button></td>
             </tr>`;
         });
@@ -227,7 +264,7 @@
         const element = document.getElementById('printable-area');
         const opt = {
             margin: [5, 5, 5, 5],
-            filename: 'Evici_Teklif.pdf',
+            filename: 'Evici_Dekorasyon_Teklif.pdf',
             html2canvas: { scale: 3, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
