@@ -67,12 +67,8 @@
                 <div><label>İşçilik(Rulo)</label><input type="number" id="labor" value="0"></div>
             </div>
             <div class="input-row">
-                <div>
-                    <label>Rulo Fiyatı</label>
-                    <input type="number" id="uPrice" value="0">
-                </div>
-                <div>
-                    <label>Para Birimi</label>
+                <div><label>Rulo Fiyatı</label><input type="number" id="uPrice" value="0"></div>
+                <div><label>Birim</label>
                     <select id="uCurr">
                         <option value="TRY">₺</option>
                         <option value="USD">$</option>
@@ -88,8 +84,8 @@
             <div class="input-row"><input type="text" id="mName" placeholder="Salon"><input type="text" id="mCode" placeholder="1220-02"></div>
             <label>Tavan Yüksekliği (m)</label><input type="number" id="mHeight" value="2.65" step="0.01">
             <div class="input-row">
-                <div><label>Boşluk(m²)</label><input type="number" id="mVoid" value="0"></div>
-                <div><label>İlave(m²)</label><input type="number" id="mExtra" value="0"></div>
+                <div><label>Boşluk ($-m^2$)</label><input type="number" id="mVoid" value="0"></div>
+                <div><label>İlave ($+m^2$)</label><input type="number" id="mExtra" value="0"></div>
             </div>
             <div class="sketch-box">
                 <input type="number" id="w1" class="wall-input top-w" placeholder="Üst"><input type="number" id="w2" class="wall-input bottom-w" placeholder="Giriş"><input type="number" id="w3" class="wall-input left-w" placeholder="Sol"><input type="number" id="w4" class="wall-input right-w" placeholder="Sağ">
@@ -112,7 +108,7 @@
             <div class="summary-row"><span>Malzeme Bedeli:</span> <span id="sumMaterial">0 TL</span></div>
             <div class="summary-row"><span>İşçilik Bedeli:</span> <span id="sumLabor">0 TL</span></div>
             <div class="summary-row"><span>Tutkal Bedeli:</span> <span id="sumGlue">0 TL</span></div>
-            <div class="summary-row"><span>KDV:</span> <span id="sumKdv">0 TL</span></div>
+            <div class="summary-row"><span>KDV Tutarı:</span> <span id="sumKdv">0 TL</span></div>
             <div class="summary-row grand-total-row"><span>GENEL TOPLAM:</span> <span id="sumGrandTotal">0 TL</span></div>
         </div>
         <button class="btn btn-pdf no-print" onclick="exportPDF()">TEKLİFİ PDF KAYDET</button>
@@ -125,7 +121,8 @@
     function addProject() {
         const h = parseFloat(document.getElementById('mHeight').value);
         const wTotal = (parseFloat(document.getElementById('w1').value) || 0) + (parseFloat(document.getElementById('w2').value) || 0) + (parseFloat(document.getElementById('w3').value) || 0) + (parseFloat(document.getElementById('w4').value) || 0);
-        const extraM2 = parseFloat(document.getElementById('mExtra').value) || 0;
+        const mVoid = parseFloat(document.getElementById('mVoid').value) || 0;
+        const mExtra = parseFloat(document.getElementById('mExtra').value) || 0;
         const rEn = parseFloat(document.getElementById('rWidth').value) / 100;
         const rBoy = parseFloat(document.getElementById('rLength').value);
         const price = parseFloat(document.getElementById('uPrice').value) || 0;
@@ -136,7 +133,10 @@
 
         const stripH = h + 0.10;
         const stripsInRoll = Math.floor(rBoy / stripH);
-        const stripsNeeded = Math.ceil(wTotal / rEn) + Math.ceil(extraM2 / (rEn * h));
+        
+        // Net Metraj Hesabı: Duvar alanı - Boşluklar + İlave Alanlar
+        const netWallWidth = wTotal + (mExtra / h) - (mVoid / h);
+        const stripsNeeded = Math.ceil(netWallWidth / rEn);
         const rollsNeeded = Math.ceil(stripsNeeded / stripsInRoll);
         
         const fullStripsLeft = (rollsNeeded * stripsInRoll) - stripsNeeded;
